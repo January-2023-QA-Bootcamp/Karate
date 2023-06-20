@@ -1,0 +1,4 @@
+{
+	"searchBox":"#twotabsearchtextbox",
+	"countTitle":"//h1/div/div/div/div/child::span[contains(.,'portable charger')]/preceding-sibling::span[2]"
+}

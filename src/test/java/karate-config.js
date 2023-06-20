@@ -8,8 +8,7 @@ function fn() {
   
     var config = {
   	baseUrl : 'http://localhost:3000',
-  	playersEndpoint : '/players',
-  	countriesEndpoint : '/countries'
+  	uiUrl : 'https://www.amazon.com/'
   };
   
   if(env == 'stg'){
@@ -17,6 +16,8 @@ function fn() {
   }else if(env == 'prod'){
   	config.baseUrl = 'http://prod-localhost:3000'
   }
+  
+  config.apiConstant = karate.callSingle('classpath:helper/constant.js');
   
   karate.configure('retry', { count: 3, interval: 5000 });
   

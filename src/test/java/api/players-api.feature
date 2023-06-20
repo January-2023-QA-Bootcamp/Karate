@@ -2,7 +2,7 @@ Feature: Validating Players API
 
   Background: 
     * url baseUrl
-    * path playersEndpoint
+    * path apiConstant.playersEndpoint
 
   @get-players
   Scenario: Get Players Validation
@@ -61,7 +61,7 @@ Feature: Validating Players API
     And request payload
     And method POST
     Then status 201
-    * def getPlayer = call read('classpath:helper/helper.feature')
+    * def getPlayer = call read('classpath:helper/helper.feature@get-player-helper')
     * match getPlayer.response.id == 21
     * match getPlayer.response.firstName == 'Dale'
     * match getPlayer.response.lastName == 'Sten'
@@ -71,9 +71,44 @@ Feature: Validating Players API
   @reusable-helper-param
   Scenario: Reuse helper sceanrio
     #* def endpoint = playersEndpoint + '/21'
-    * def getPlayer = call read('classpath:helper/helper.feature@get-player-helper-params'){url:#(baseUrl), path:#(playersEndpoint + '/21')}
+    * def getPlayer = call read('classpath:helper/helper.feature@get-player-helper-params'){url:#(baseUrl), path:#(apiConstant.playersEndpoint + '/21')}
     * match getPlayer.response.id == 21
     * match getPlayer.response.firstName == 'Dale'
     * match getPlayer.response.lastName == 'Sten'
     * match getPlayer.response.DOB == '20/05/1996'
     * match getPlayer.response.countryCode == '70'
+
+  @java-custom
+  Scenario: Calling Java Method
+    * def common = Java.type('helper.Common')
+    * def time = common.getTime()
+    * print time
+    * common.printOSType()
+
+  @inbuilt-js
+  Scenario: In-built JS Function
+    * def fun =
+      """
+      function(){
+      	print("in-built js");
+      }
+      """
+    * eval fun()
+    * def retFun =
+    """
+    function(){
+    	return 3;
+    }
+    """
+		* def result = retFun()
+		* print result
+		* def x = 10
+		* def jsloop =
+		"""
+		function(){
+			var i = x*2;
+			print(i)
+			return i;
+		}
+		"""
+		* karate.repeat(3,jsloop)
